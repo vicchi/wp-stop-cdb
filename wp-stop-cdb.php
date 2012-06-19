@@ -32,7 +32,23 @@ class WP_StopCDB extends WP_PluginBase {
 		
 		$this->hook ('plugins_loaded');
 	}
+
+	/**
+	 * Mobile device user agent detection; courtesy of Danny Herran
+	 * http://www.dannyherran.com/2011/02/detect-mobile-browseruser-agent-with-php-ipad-iphone-blackberry-and-others/
+	 */
 	
+	function detect_mobile ()
+	{
+	    if (preg_match ('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i',
+				$_SERVER['HTTP_USER_AGENT'])) {
+	        return true;
+		}
+
+	    else {
+	        return false;
+		}
+	}	
 	/**
 	 * "plugins_loaded" action hook; called after all active plugins and pluggable functions
 	 * are loaded.
@@ -44,7 +60,9 @@ class WP_StopCDB extends WP_PluginBase {
 		register_activation_hook (__FILE__, array ($this, 'add_settings'));
 		
 		$this->hook ('wp_enqueue_scripts', 'style');
-		$this->hook ('wp_footer', 'add_ribbon');
+		if (!$this->detect_mobile ()) {
+			$this->hook ('wp_footer', 'add_ribbon');
+		}
 	}
 	
 	/**
