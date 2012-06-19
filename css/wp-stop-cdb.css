@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* CSS Document */
+
+.wp-stop-cdb-ribbon {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 100000;
+	cursor: pointer;
+}
